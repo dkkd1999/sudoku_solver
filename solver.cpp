@@ -7,6 +7,7 @@ class grid
 {
 private:
     vector<vector<int>> g;
+    vector<vector<bool>> h_done, v_done, box_done;
     bool is_placeable(int i, int j, int val)
     {
         int cnt = (i / 3) * 3 + j / 3;
@@ -21,7 +22,6 @@ private:
     }
 
 public:
-    vector<vector<bool>> h_done, v_done, box_done;
     bool insert_cell(int i, int j, int val)
     {
         if (is_placeable(i, j, val))
@@ -61,7 +61,7 @@ public:
             return false;
         }
     }
-    void get_grid()
+    void initialize_grid()
     {
         for (int i = 0; i <= 10; i++)
         {
@@ -73,16 +73,13 @@ public:
         cin >> x;
         for (int i = 0; i < 9; i++)
         {
-            g.push_back(vector<int>(9));
+            g.push_back(vector<int>(9, 0));
             for (int j = 0; j < 9; j++)
             {
-                int cnt = (i / 3) * 3 + j / 3;
-                g[i][j] = x[i * 9 + j] - '0';
-                if (g[i][j] != 0)
+                int val = x[i * 9 + j] - '0';
+                if (val != 0)
                 {
-                    h_done[i][g[i][j]] = true;
-                    v_done[j][g[i][j]] = true;
-                    box_done[cnt][g[i][j]] = true;
+                    insert_cell(i, j, val);
                 }
             }
         }
@@ -103,30 +100,12 @@ public:
 class solver
 {
 private:
-    grid start, current, ans;
+    grid current;
 
-public:
-    void input_start()
-    {
-        start.get_grid();
-        current = start;
-    }
-    void show_ans()
-    {
-        if (solve(0, 0))
-        {
-            ans.print_grid();
-        }
-        else
-        {
-            cout << "failed..." << endl;
-        }
-    }
     bool solve(int i, int j)
     {
         if (i == 9)
         {
-            ans = current;
             return true;
         }
         int nexti = i + (j == 8 ? 1 : 0);
@@ -152,6 +131,23 @@ public:
         else
         {
             return solve(nexti, nextj);
+        }
+    }
+
+public:
+    void input_start()
+    {
+        current.initialize_grid();
+    }
+    void show_ans()
+    {
+        if (solve(0, 0))
+        {
+            current.print_grid();
+        }
+        else
+        {
+            cout << "failed..." << endl;
         }
     }
 };
