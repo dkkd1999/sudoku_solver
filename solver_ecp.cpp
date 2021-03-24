@@ -306,6 +306,32 @@ public:
         init();
         get_num();
     }
+    ~ecp()
+    {
+        cout << "destructor called" << endl;
+        col_node.clear();
+        col_node.shrink_to_fit();
+
+        row_node.clear();
+        row_node.shrink_to_fit();
+
+        ecp_node.clear();
+        ecp_node.shrink_to_fit();
+
+        count.clear();
+        count.shrink_to_fit();
+
+        solution.clear();
+        solution.shrink_to_fit();
+
+        for (int i = 0; i < input.size(); i++)
+        {
+            input[i].clear();
+            input[i].shrink_to_fit();
+        }
+        input.clear();
+        input.shrink_to_fit();
+    }
 };
 
 int main()
